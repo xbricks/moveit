@@ -1,0 +1,27 @@
+<ion-view view-title="Edit Account">
+  <ion-content>
+    <form>
+      <ion-list>
+        <label class="item item-input">
+          <span class="input-label">Display Name</span>
+          <input type="text" ng-model="userData.displayName" maxlength="20">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Phone</span>
+          <input type="tel" ng-model="userData.phone">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Address</span>
+          <input type="text" ng-model="userData.address">
+        </label>
+        <label class="item  item-divider">
+          <span class="input-label">Sign up as?</span>
+        </label>
+         <ion-radio ng-model="userData.role" ng-value="'carrier'">Carrier</ion-radio>
+         <ion-radio ng-model="userData.role" ng-value="'customer'">Customer</ion-radio>
+
+        <button class="button button-full button-positive" ng-click="update(userData)">Update</button>
+      </ion-list>
+    </form>
+  </ion-content>
+</ion-view>

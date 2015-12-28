@@ -1,0 +1,34 @@
+<ion-view view-title="Move It">
+  <ion-content>
+  	<div class="list card">
+		<div class="item" ng-repeat="trucklist in trucklists | filter: { $id: tid}">
+			<h2>{{trucklist.brands}}</h2>
+			<p>${{trucklist.drate}} / Day</p>
+		</div>
+		<div class="item item-body" ng-repeat="trucklist in trucklists | filter: { $id: tid}">
+			<img class="full-image" src="{{trucklist.trucksimg}}">
+			<p>
+				{{trucklist.desc}}
+			</p>
+			<p>
+				<label>Additional Rate</label>
+				<a href="#" class="subdued">Rates {{trucklist.dmile}} / miles</a>
+			</p>
+			<p>
+				<a href="#" class="subdued">Available from {{trucklist.avafrom | date:'dd-MM-yy'}} to {{trucklist.avauntil | date:'dd-MM-yy'}}</a>
+			</p>
+		</div>
+		<div class="item tabs tabs-secondary tabs-icon-left" ng-repeat="trucklist in trucklists | filter: { $id: tid}">
+			<a class="tab-item" href="#">
+				<i class="icon ion-ios-telephone"></i>
+					{{ownerDatas[1].phone}}     
+			</a>
+			<a class="tab-item" href="#">
+				<i class="icon ion-ios-bookmarks"></i>
+			</a>
+		</div>
+	</div>	  	
+  </ion-content>
+</ion-view>
+
+

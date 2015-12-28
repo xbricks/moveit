@@ -1,0 +1,50 @@
+<ion-modal-view>
+<ion-header-bar class="bar bar-header bar-positive">
+  <h1 class="title">Add New Trucks</h1>
+    <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+  </ion-header-bar>
+  <ion-content>
+  	<div class="list list-inset">
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Trucks Photo</span>
+        <button class="button button-positive" ng-click="getImage()">
+            Get Image
+        </button>
+      </label>
+      <label class="item item-input item-stacked-label">
+        <img ng-src="{{collection.selectedImage}}" style="width:250px; height: 250px;"/>
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Trucks Brand</span>
+        <input type="text" placeholder="Brand" ng-model="trucks.Brand">
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Daily Rates in $</span>
+        <input type="number" placeholder="Rates" ng-model="trucks.Daily">
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">per Mile Rates in $</span>
+        <input type="number" placeholder="Rates per Mile" ng-model="trucks.Mile">
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Available From</span>
+        <ionic-datepicker input-obj="datepickerObject">
+          <button class="button button-block button-positive" > {{currentDate | date:'dd - MMMM - yyyy'}}</button>
+        </ionic-datepicker>
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Available Until</span>
+        <ionic-datepicker input-obj="datepickerObject2">
+          <button class="button button-block button-positive"> {{currentDate2 | date:'dd - MMMM - yyyy'}}</button>
+        </ionic-datepicker>
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Description</span>
+        <textarea placeholder="Add your trucks specification here" rows="5" ng-model="trucks.Desc"></textarea>
+      </label>
+      <button class="button button-outline button-full button-royal" ng-click="addTrucks(trucks)">
+        Add New Trucks
+      </button>
+    </div>
+  </ion-content>
+</ion-modal-view>

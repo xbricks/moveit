@@ -1,0 +1,41 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Sign Up</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeModal(2)">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form>
+      <ion-list>
+        <label class="item item-input">
+          <span class="input-label">Display Name</span>
+          <input type="text" placeholder="enter displayname" ng-model="user.displayname" maxlength="20">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Email</span>
+          <input type="email" placeholder="you@domain.com" ng-model="user.email">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+          <input type="password" placeholder="At least 6 characters" ng-model="user.password">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Phone</span>
+          <input type="tel" placeholder="your phone number" ng-model="user.phone">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Address</span>
+          <input type="text" placeholder="your address..." ng-model="user.address">
+        </label>
+        <label class="item  item-divider">
+          <span class="input-label">Sign up as?</span>
+        </label>
+         <ion-radio ng-model="user.role" ng-value="'carrier'">Carrier</ion-radio>
+         <ion-radio ng-model="user.role" ng-value="'customer'">Customer</ion-radio>
+
+        <button class="button button-full button-positive" ng-click="createUser(user)">Create</button>
+      </ion-list>
+    </form>
+  </ion-content>
+</ion-modal-view>

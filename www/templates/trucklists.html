@@ -1,0 +1,16 @@
+
+<ion-view view-title="Move It">
+  <ion-content>
+  	<label class="item item-input">
+  		<i class="icon ion-search placeholder-icon"></i>
+  		<input type="text" ng-model="searchMenu" placeholder="Search">
+	  </label>
+    <ion-list>
+      <ion-item class="item item-thumbnail-left" ng-repeat="trucklist in trucklists | filter:searchMenu"  href="#/app/trucklists/{{trucklist.$id}}">     
+	      <img src="{{trucklist.trucksimg}}">
+	      <h1> {{trucklist.brands}}</h1>
+	      <p>Rp. {{trucklist.drate}} / Day</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
