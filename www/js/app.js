@@ -9,7 +9,7 @@
 
 var fb = "https://vivid-fire-2745.firebaseio.com/";
 console.log("load firebase url : "+fb);
-var mvMod = angular.module('mv', ['ionic','ngCordova','mv.services','mv.controllers','firebase','ui.router', 'ionic-datepicker'])
+var mvMod = angular.module('mv', ['ionic','ngCordova','mv.services','truckFilters','mv.controllers','firebase','ui.router', 'ionic-datepicker'])
 
 .run(function ($ionicPlatform, $rootScope, $location, Auth, $ionicLoading) {
   $ionicPlatform.ready(function() {
@@ -30,7 +30,7 @@ var mvMod = angular.module('mv', ['ionic','ngCordova','mv.services','mv.controll
     ionic.Platform.fullScreen();
 
     $rootScope.fb = fb;
-    $rootScope.userData = null;
+    $rootScope.tdref = new Firebase(fb+'users');
     $rootScope.userID = null;
 
     console.log("rootScope fb : "+$rootScope.fb);
@@ -126,7 +126,7 @@ var mvMod = angular.module('mv', ['ionic','ngCordova','mv.services','mv.controll
   })
 
   .state('app.single', {
-      url: '/trucklists/:trucklistID',
+      url: '/trucklists/:trucklistID/:ownerID',
       views: {
         'menuContent': {
           templateUrl: 'templates/trucklist.html',

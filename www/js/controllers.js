@@ -228,13 +228,13 @@ angular.module('mv.controllers', [])
   ********************Manage Trucks Controller*********************
   *****************************************************************/
 
-.controller('ManageCtrl', function ($ionicLoading, $firebase, $rootScope, $scope, $timeout, $ionicModal, $cordovaImagePicker, $ionicPlatform, $ionicPopup, getTrucksFactory) {
+.controller('ManageCtrl', function ($ionicLoading, $firebase, $rootScope, $scope, $timeout, $ionicModal, $cordovaImagePicker, $ionicPlatform, $ionicPopup, getDataFactory) {
  
     var fbData = new Firebase(fb);
 
     console.log("truck authData", $rootScope.userID);
 
-    $scope.userTrucks = getTrucksFactory;
+    $scope.userTrucks = getDataFactory.getTrucks();
     console.log("user trukcs", $scope.userTrucks);
 
     $scope.listCanSwipe = true  
@@ -275,7 +275,7 @@ angular.module('mv.controllers', [])
                     window.plugins.Base64.encodeFile($scope.collection.selectedImage, function(base64){  // Encode URI to Base64 needed for contacts plugin
                         $scope.collection.selectedImage = base64;
                         console.log("base64:",base64);
-                        //$scope.addContact();    // Save contact
+                       
                     });
                 }
             }, function(error) {
@@ -354,11 +354,11 @@ angular.module('mv.controllers', [])
 
             var fbData = new Firebase(fb);
             var authData = fbData.getAuth();
-            var postsRef = fbData.child("fleet");
+            var postsRef = fbData.child("users/"+authData.uid+"/fleet");
 
               // we can also chain the two calls together
             postsRef.push().set({
-                owner: authData.uid,
+                //owner: authData.uid,
                 brands: trucks.Brand,
                 drate: trucks.Daily,
                 dmile: trucks.Mile,
@@ -417,22 +417,26 @@ angular.module('mv.controllers', [])
 
 
  /*****************************************************************
-  ***********************Lists Controller**************************
+  ****************Trucks Lists Controller**************************
   *****************************************************************/
 
-.controller('TrucklistsCtrl', function ($scope, getTrucksFactory) {
-
-    $scope.trucklists = getTrucksFactory;
-    console.log("trucklists", $scope.trucklists)
+.controller('TrucklistsCtrl', function ($scope, $firebaseArray, getDataFactory) {
+    
+    $scope.trucklists = getDataFactory.getTrucks();
 
 })
 
-.controller('TrucklistCtrl', function ($scope, $stateParams, getTrucksFactory, userDataFactory) {
 
-    $scope.trucklists = getTrucksFactory;
-    $scope.ownerDatas = userDataFactory;
+/*****************************************************************
+  ****************Single Trucks Controller************************
+  *****************************************************************/
+.controller('TrucklistCtrl', function ($scope, $stateParams, getDataFactory) {
 
-    console.log("ownerData", $scope.ownerDatas);
+    $scope.trucklists = getDataFactory.getTrucks();
+    $scope.user = getDataFactory.getUser();
     $scope.tid = $stateParams.trucklistID;
+    $scope.oid = $stateParams.ownerID;
+    
+   
 
 });

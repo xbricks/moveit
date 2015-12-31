@@ -17,6 +17,7 @@
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="3000"/>
+  <access origin="tel:*" launch-external="yes"/>
   <allow-navigation href="https://cdn.firebase.com/*"/>
   <allow-navigation href="https://vivid-fire-2745.firebaseio.com/*"/>
   <feature name="StatusBar">
