@@ -1,0 +1,18 @@
+<ion-view view-title="Move It">
+  <ion-content>
+  	<label class="item item-input">
+  		<i class="icon ion-search placeholder-icon"></i>
+  		<input type="text" ng-model="searchMenu" placeholder="Search">
+	  </label>
+   <ion-list ng-controller="TrucklistsCtrl">
+      <ion-item class="item item-thumbnail-left" ng-repeat="trucklist in $storage.fav">     
+	      <img src="{{trucklist.trucksimg}}">
+	      <h1> {{trucklist.brands}}</h1>
+	      <p>Rp. {{trucklist.drate}} / Day</p>
+        <ion-option-button class="button-assertive" ng-click="removeItem($index)">
+          <i class="ion-trash-a"></i>
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

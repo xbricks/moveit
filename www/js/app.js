@@ -9,7 +9,7 @@
 
 var fb = "https://vivid-fire-2745.firebaseio.com/";
 console.log("load firebase url : "+fb);
-var mvMod = angular.module('mv', ['ionic','ngCordova','mv.services','truckFilters','mv.controllers','firebase','ui.router', 'ionic-datepicker'])
+var mvMod = angular.module('mv', ['ionic','ngCordova','ngStorage','mv.services','truckFilters','mv.controllers','firebase','ui.router', 'ionic-datepicker'])
 
 .run(function ($ionicPlatform, $rootScope, $location, Auth, $ionicLoading) {
   $ionicPlatform.ready(function() {
@@ -135,11 +135,12 @@ var mvMod = angular.module('mv', ['ionic','ngCordova','mv.services','truckFilter
       }
   })
 
-  .state('app.order', {
-      url: '/order',
+  .state('app.fav', {
+      url: '/fav',
       views: {
         'menuContent': {
-          templateUrl: 'templates/order.html'
+          templateUrl: 'templates/favorites.html',
+          controller: 'FavItemCtrl'
         }
       }
   })

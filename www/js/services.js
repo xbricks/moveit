@@ -49,12 +49,36 @@ angular.module('mv.services', ['firebase'])
 		}
 	])
 
-	// .factory("getTrucksFactory", ["$firebaseArray", 
-	// 	function ($firebaseArray) {
- //    		// create a reference to the database where we will store our data
- //    		var ref = new Firebase(fb+'fleet');
+	.factory('favItemFactory', function ($localStorage) {
 
- //    		return $firebaseArray(ref);
- //  		}
-	// ]);
+		// var o = {
+		// 	favorites: []
+		// }
+
+		// o.addItemToFavorites = function(item, index) {
+		// 	// make sure there's a item to add
+		// 	if (!item) return false;
+		// 	// add to favorites array
+		// 	o.favorites.unshift(item);
+		// }
+
+		// o.removeItemFromFavorites = function(item, index) {
+		//     // make sure there's a item to add
+		//     if (!item) return false;
+		//     // add to favorites array
+		// 	o.favorites.splice(index, 1);
+		// }
+
+		// return o;
+
+
+		var $storage = $localStorage.$default({
+        	fav:[]
+    	});
+
+		this.getfav=$storage.fav;
+
+    	return this;
+	});
+
 

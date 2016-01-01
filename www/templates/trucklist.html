@@ -18,15 +18,22 @@
 				<a href="#" class="subdued">Available from {{trucklist.avafrom | date:'dd-MM-yy'}} to {{trucklist.avauntil | date:'dd-MM-yy'}}</a>
 			</p>
 			<p ng-repeat="owner in user | filter: { $id: oid}"><bold>Tenant: {{owner.displayName}}</bold></p>
+			<pre>{{trucklists.indexOf(trucklist)}}</pre>
 		</div>
 		<div class="item tabs tabs-secondary tabs-icon-left" ng-repeat="trucklist in trucklists | filter: { $id: tid}">
 			<a class="tab-item" ng-repeat="owner in user | filter: { $id: oid}" href="tel: {{owner.phone}}">
 				<i class="icon ion-ios-telephone"></i>
+				Call Tenant
 			</a>
-			<a class="tab-item" href="#">
+			<!--<a class="tab-item" ng-click="addFav(true,{{trucklists.indexOf(trucklist)}})">
 				<i class="icon ion-ios-bookmarks"></i>
+			</a>-->
+			<a class="tab-item" ng-click="addFav(trucklist)">
+				<i class="icon ion-heart"></i>
+				Add to Favorite
 			</a>
 		</div>
-	</div>	
+	</div>
+
   </ion-content>
 </ion-view>

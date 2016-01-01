@@ -430,13 +430,51 @@ angular.module('mv.controllers', [])
 /*****************************************************************
   ****************Single Trucks Controller************************
   *****************************************************************/
-.controller('TrucklistCtrl', function ($scope, $stateParams, getDataFactory) {
+.controller('TrucklistCtrl', function ($scope, $stateParams, $ionicPopup, getDataFactory, favItemFactory) {
 
     $scope.trucklists = getDataFactory.getTrucks();
     $scope.user = getDataFactory.getUser();
     $scope.tid = $stateParams.trucklistID;
     $scope.oid = $stateParams.ownerID;
     
+    
+    $scope.addFav = function (item){
+      var alertPopup = $ionicPopup.alert({
+          title: 'Success!',
+          template: 'Added to Favorites',
+          buttons: [
+            {
+              text: '<b>Ok</b>',
+              type: 'button-royal'
+            }
+          ]
+      });
+      
+      favItemFactory.getfav.push(item);
+    } 
+
+    // $scope.addFav = function (bool, index){
+    //     alert("fav added "+index);
+    //     if (bool) favItemFactory.addItemToFavorites($scope.trucklists[index]);  
+    // }
+    
    
+
+})
+
+
+.controller('FavItemCtrl', function ($scope, $localStorage, favItemFactory) {
+    
+    // $scope.favorites = favItemFactory.favorites;
+   
+    // $scope.removeItem = function(item, index) {
+    //     favItemFactory.removeItemFromFavorites(item, index);
+    // }
+
+    $scope.$storage = $localStorage;
+
+    $scope.removeItem = function (index){
+        $scope.$storage.fav.splice(index, 1);
+    }
 
 });
