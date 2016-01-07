@@ -1,9 +1,9 @@
-<ion-view view-title="Move It">
+<ion-view view-title="Manage Trucks">
   <ion-content>
   	<ion-list can-swipe="listCanSwipe">
-      <ion-item class="item item-thumbnail-left" ng-repeat="userTruck in userTrucks | filter: { owner: userID}" href="#/app/trucklists/{{userTruck.$id}}">     
+      <ion-item class="item item-thumbnail-left" ng-repeat="userTruck in userTrucks | filter: { owner: userID}" href="#/app/trucklists/{{userTruck.$id}}/{{userTruck.owner}}">     
 	      <img src="{{userTruck.trucksimg}}">
-	      <h1> {{userTruck.brands}}</h1>
+	      <h2> {{userTruck.brands}}</h2>
 	      <p>${{userTruck.drate}} / Day</p>
 		  <ion-option-button class="button-assertive" ng-click="userTrucks.$remove(userTruck)">
 	      	Delete
@@ -14,6 +14,7 @@
 
       </ion-item>
     </ion-list>
+    <center><p>swipe to delete/edit</p></center>
   </ion-content>
 </ion-view>
 <ion-tabs class="tabs-royal tabs-icon-top">

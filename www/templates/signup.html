@@ -28,12 +28,6 @@
           <span class="input-label">Address</span>
           <input type="text" placeholder="your address..." ng-model="user.address">
         </label>
-        <label class="item  item-divider">
-          <span class="input-label">Sign up as?</span>
-        </label>
-         <ion-radio ng-model="user.role" ng-value="'carrier'">Carrier</ion-radio>
-         <ion-radio ng-model="user.role" ng-value="'customer'">Customer</ion-radio>
-
         <button class="button button-full button-positive" ng-click="createUser(user)">Create</button>
       </ion-list>
     </form>

@@ -27,14 +27,17 @@ angular.module('mv.services', ['firebase'])
 	// 	}
 	// ])
 	
-	.factory("getDataFactory", ["$firebaseArray", 
-		function ($firebaseArray) {
+	.factory("getDataFactory", ["$firebaseArray", "$firebaseObject", 
+		function ($firebaseArray, $firebaseObject) {
 			// create a reference to the database where we will store our data
-			var refUSER = new Firebase(fb+'users');
+			//var refUSER = new Firebase(fb+'users');
 			var refTRUCKS = new Firebase(fb+'fleet');
 			return {
-				getUser: function(){
-					return $firebaseArray(refUSER);
+				getUser: function(uid){
+					return $firebaseObject(new Firebase(fb+'users/'+uid));
+				},
+				getTruck: function(tid){
+					return $firebaseObject(new Firebase(fb+'fleet/'+tid));
 				},
 				getTrucks: function(){
 					return $firebaseArray(refTRUCKS);

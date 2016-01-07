@@ -19,6 +19,7 @@
   <preference name="SplashScreenDelay" value="3000"/>
   <access origin="tel:*" launch-external="yes"/>
   <allow-navigation href="https://cdn.firebase.com/*"/>
+  <allow-navigation href="https://cdnjs.cloudflare.com/*"/>
   <allow-navigation href="https://vivid-fire-2745.firebaseio.com/*"/>
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>

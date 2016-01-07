@@ -25,7 +25,7 @@ angular.module('mv.controllers', [])
 
     $scope.createUser = function (user) {
         console.log("Create User Function called");
-        if (user && user.email && user.password && user.displayname && user.phone && user.address && user.role) {
+        if (user && user.email && user.password && user.displayname && user.phone && user.address) {
             $ionicLoading.show({
                 template: 'Signing Up...'
             });
@@ -52,8 +52,7 @@ angular.module('mv.controllers', [])
                     email: user.email,
                     displayName: user.displayname,
                     phone: user.phone,
-                    address: user.address,
-                    role: user.role
+                    address: user.address
                 });
                 $ionicLoading.hide();
                 $scope.modal2.hide();
@@ -218,7 +217,7 @@ angular.module('mv.controllers', [])
           }
         };
         // Modify the 'first' and 'last' children, but leave other data at fredNameRef unchanged
-        uRef.update({ displayName: user.displayName, address: user.address, phone: user.phone, role: user.role }, onComplete);
+        uRef.update({ displayName: user.displayName, address: user.address, phone: user.phone }, onComplete);
     };
 
 })
@@ -420,9 +419,75 @@ angular.module('mv.controllers', [])
   ****************Trucks Lists Controller**************************
   *****************************************************************/
 
-.controller('TrucklistsCtrl', function ($scope, $firebaseArray, getDataFactory) {
+.controller('TrucklistsCtrl', function ($scope, $ionicModal, getDataFactory) {
     
     $scope.trucklists = getDataFactory.getTrucks();
+
+
+    $ionicModal.fromTemplateUrl('templates/filterdate.html', {
+
+        scope: $scope
+    }).then(function (modal) {
+        $scope.modal = modal;
+        console.log("modal clicked");
+    });
+
+    //Date Picker
+    $scope.bookFrom = new Date();
+    $scope.bookTo = $scope.bookFrom;
+
+    $scope.bookFromCallback = function (val) {
+      if(typeof(val)==='undefined'){    
+          console.log('Date not selected');
+
+      }else{
+          console.log('Selected date is : ', val);
+          $scope.bookFrom = new Date(val).getTime();
+      }
+    };
+
+    $scope.bookToCallback = function (val) {
+      if(typeof(val)==='undefined'){    
+          console.log('Date not selected');
+
+      }else{
+          console.log('Selected date is : ', val.getTime());
+          $scope.bookTo = new Date(val).getTime();
+      }
+    };
+
+
+    $scope.bookFromObject = {
+      titleLabel: 'Select Date',
+      inputDate: $scope.bookFrom,  //Optional
+      templateType: 'popup', //Optional
+      showTodayButton: 'true', //Optional
+      modalHeaderColor: 'bar-positive', //Optional
+      modalFooterColor: 'bar-positive', //Optional
+      from: $scope.bookFrom, //Optional
+      to: new Date(2017, 1, 1),  //Optional
+      callback: function (val) {  //Mandatory
+         $scope.bookFromCallback(val);
+      },
+      dateFormat: 'dd-MM-yyyy', //Optional
+      closeOnSelect: false, //Optional
+    };   
+
+    $scope.bookToObject = {
+      titleLabel: 'Select Date',
+      inputDate: $scope.bookFrom,  //Optional
+      templateType: 'popup', //Optional
+      showTodayButton: 'true', //Optional
+      modalHeaderColor: 'bar-positive', //Optional
+      modalFooterColor: 'bar-positive', //Optional
+      from: $scope.bookFrom, //Optional
+      to: new Date(2017, 1, 1),  //Optional
+      callback: function (val) {  //Mandatory
+         $scope.bookToCallback(val);
+      },
+      dateFormat: 'dd-MM-yyyy', //Optional
+      closeOnSelect: false, //Optional
+    }; 
 
 })
 
@@ -432,11 +497,19 @@ angular.module('mv.controllers', [])
   *****************************************************************/
 .controller('TrucklistCtrl', function ($scope, $stateParams, $ionicPopup, getDataFactory, favItemFactory) {
 
-    $scope.trucklists = getDataFactory.getTrucks();
-    $scope.user = getDataFactory.getUser();
-    $scope.tid = $stateParams.trucklistID;
-    $scope.oid = $stateParams.ownerID;
+    $scope.tid = $stateParams.trucklistID; //get truck id from list
+    $scope.oid = $stateParams.ownerID; // get owner/user id from list
+
+    console.log("oid : ", $scope.oid);
+    $scope.trucklist = getDataFactory.getTruck($scope.tid);
+    $scope.user = getDataFactory.getUser($scope.oid);
+   
+    console.log("scope user : ", $scope.user);
+
+
     
+
+
     
     $scope.addFav = function (item){
       var alertPopup = $ionicPopup.alert({

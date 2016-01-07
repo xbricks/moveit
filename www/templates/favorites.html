@@ -1,18 +1,19 @@
-<ion-view view-title="Move It">
+<ion-view view-title="Favorites">
   <ion-content>
   	<label class="item item-input">
   		<i class="icon ion-search placeholder-icon"></i>
   		<input type="text" ng-model="searchMenu" placeholder="Search">
 	  </label>
    <ion-list ng-controller="TrucklistsCtrl">
-      <ion-item class="item item-thumbnail-left" ng-repeat="trucklist in $storage.fav">     
+      <ion-item class="item item-thumbnail-left" ng-repeat="trucklist in $storage.fav" href="#/app/trucklists/{{trucklist.$id}}/{{trucklist.owner}}">     
 	      <img src="{{trucklist.trucksimg}}">
-	      <h1> {{trucklist.brands}}</h1>
+	      <h2> {{trucklist.brands}}</h2>
 	      <p>Rp. {{trucklist.drate}} / Day</p>
         <ion-option-button class="button-assertive" ng-click="removeItem($index)">
           <i class="ion-trash-a"></i>
         </ion-option-button>
       </ion-item>
     </ion-list>
+    <center><p>swipe to delete</p></center>
   </ion-content>
 </ion-view>
