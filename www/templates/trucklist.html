@@ -3,7 +3,7 @@
   	<div class="list card">
 		<div class="item">
 			<h2>{{trucklist.brands}}</h2>
-			<p>${{trucklist.drate}} / Day</p>
+			<p>{{trucklist.drate | currency:"Rp"}} / Day</p>
 		</div>
 		<div class="item item-body">
 			<img class="full-image" src="{{trucklist.trucksimg}}">
@@ -12,7 +12,7 @@
 			</p>
 			<p>
 				<label>Additional Rate</label>
-				<a href="#" class="subdued">Rates {{trucklist.dmile}} / miles</a>
+				<a href="#" class="subdued">Rates {{trucklist.dmile | currency:"Rp"}} / miles</a>
 			</p>
 			<p>
 				<a href="#" class="subdued">Available from {{trucklist.avafrom | date:'dd-MM-yy'}} to {{trucklist.avauntil | date:'dd-MM-yy'}}</a>

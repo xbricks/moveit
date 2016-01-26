@@ -11,7 +11,7 @@ var fb = "https://vivid-fire-2745.firebaseio.com/";
 console.log("load firebase url : "+fb);
 var mvMod = angular.module('mv', ['ionic','ngCordova','ngStorage','mv.services','truckFilters','mv.controllers','firebase','ui.router', 'ionic-datepicker'])
 
-.run(function ($ionicPlatform, $rootScope, $location, Auth, $ionicLoading) {
+.run(function ($ionicPlatform, $rootScope, $location, Auth, $ionicLoading, $ionicHistory, $timeout, $log) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -50,7 +50,13 @@ var mvMod = angular.module('mv', ['ionic','ngCordova','ngStorage','mv.services',
       $ionicLoading.show({
         template: 'Logging Out...'
       });
-        Auth.$unauth();
+      $timeout(function () {
+        $ionicHistory.clearCache();
+        $ionicHistory.clearHistory();
+        $log.debug('clearing cache')
+      },300)
+      Auth.$unauth();
+      $ionicLoading.hide();
     }
 
 

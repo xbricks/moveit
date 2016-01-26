@@ -105,10 +105,7 @@ angular.module('mv.controllers', [])
                 console.log("Logged in as:" + authData.uid);
                 ref.child("users").child(authData.uid).on('value', function (snapshot) {
                     var val = snapshot.val();
-                    //To Update AngularJS $scope either use $apply or $timeout
-                    // $scope.$apply(function () {
-                    //     $rootScope.userData = val;
-                    // });
+                    //To Update AngularJS $scope using $timeout
                     $timeout(function() {
                         $rootScope.userData = val;
                         $rootScope.userID = authData.uid;
@@ -346,22 +343,23 @@ angular.module('mv.controllers', [])
 
     $scope.addTrucks = function (trucks) {
         console.log("addTrucks Function called");
-        if (  trucks.Brand && trucks.Daily && trucks.Mile && trucks.Desc) {
+        if ( $scope.collection.selectedImage && trucks.Brand && trucks.Daily && trucks.Mile && trucks.Desc && trucks.Loc) {
             $ionicLoading.show({
                 template: 'Adding Trucks'
             });
 
             var fbData = new Firebase(fb);
             var authData = fbData.getAuth();
-            var postsRef = fbData.child("users/"+authData.uid+"/fleet");
+            var postsRef = fbData.child("fleet");
 
-              // we can also chain the two calls together
+            // we can also chain the two calls together
             postsRef.push().set({
-                //owner: authData.uid,
+                owner: authData.uid,
                 brands: trucks.Brand,
                 drate: trucks.Daily,
-                dmile: trucks.Mile,
+                mrate: trucks.Mile,
                 desc: trucks.Desc,
+                loc: trucks.Loc,
                 avafrom: $scope.currentDate,
                 avauntil: $scope.currentDate2,
                 trucksimg:$scope.collection.selectedImage
@@ -425,12 +423,22 @@ angular.module('mv.controllers', [])
 
 
     $ionicModal.fromTemplateUrl('templates/filterdate.html', {
-
         scope: $scope
     }).then(function (modal) {
         $scope.modal = modal;
         console.log("modal clicked");
     });
+
+    //Filter Price
+    $scope.range = {
+        minPrice: 1,
+        maxPrice: 999999
+    };
+
+    $scope.filterRange = function(obj) {
+        return obj.drate >= $scope.range.minPrice && obj.drate <= $scope.range.maxPrice;
+    };
+
 
     //Date Picker
     $scope.bookFrom = new Date();

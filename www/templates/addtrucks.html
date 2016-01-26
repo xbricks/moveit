@@ -12,19 +12,21 @@
         </button>
       </label>
       <label class="item item-input item-stacked-label">
-        <img ng-src="{{collection.selectedImage}}" style="width:250px; height: 250px;"/>
+        
+          <img ng-src="{{collection.selectedImage}}" style="width:250px; height: 250px;"/></div>
+        
       </label>
       <label class="item item-input item-stacked-label">
-        <span class="input-label">Trucks Brand</span>
-        <input type="text" placeholder="Brand" ng-model="trucks.Brand">
+        <input type="text" placeholder="Trucks Brand" ng-model="trucks.Brand">
       </label>
       <label class="item item-input item-stacked-label">
-        <span class="input-label">Daily Rates in $</span>
-        <input type="number" placeholder="Rates" ng-model="trucks.Daily">
+        <input type="number" placeholder="Daily Rates in Rp" ng-model="trucks.Daily">
       </label>
       <label class="item item-input item-stacked-label">
-        <span class="input-label">per Mile Rates in $</span>
-        <input type="number" placeholder="Rates per Mile" ng-model="trucks.Mile">
+        <input type="number" placeholder="per Mile Rates in Rp" ng-model="trucks.Mile">
+      </label>
+      <label class="item item-input item-stacked-label">
+        <input type="text" placeholder="Location" ng-model="trucks.Loc">
       </label>
       <label class="item item-input item-stacked-label">
         <span class="input-label">Available From</span>
@@ -39,10 +41,9 @@
         </ionic-datepicker>
       </label>
       <label class="item item-input item-stacked-label">
-        <span class="input-label">Description</span>
         <textarea placeholder="Add your trucks specification here" rows="5" ng-model="trucks.Desc"></textarea>
       </label>
-      <button class="button button-outline button-full button-royal" ng-click="addTrucks(trucks)">
+      <button class="button button-block button-outline button-royal" ng-click="addTrucks(trucks)">
         Add New Trucks
       </button>
     </div>

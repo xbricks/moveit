@@ -1,23 +1,16 @@
-<ion-nav-bar class="bar-calm">
-   
-      
-      <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-ios-calendar-outline" ng-click="modal.show()">
-        </button>
-      </ion-nav-buttons>
-    </ion-nav-bar>
 <ion-view view-title="Move It">
   <ion-content>
   	<label class="item item-input">
   		<i class="icon ion-search placeholder-icon"></i>
   		<input type="text" ng-model="searchMenu" placeholder="Search">
 	  </label>
-   <ion-list ng-controller="TrucklistsCtrl">
-      <ion-item class="item item-thumbnail-left" ng-repeat="trucklist in trucklists | filter:searchMenu"  href="#/app/trucklists/{{trucklist.$id}}/{{trucklist.owner}}">     
-	      <img src="{{trucklist.trucksimg}}">
-	      <h2> {{trucklist.brands}}</h2>
-	      <p>Rp. {{trucklist.drate}} / Day</p>
+    <ion-list ng-controller="TrucklistsCtrl">
+      <ion-item class="item item-thumbnail-left" ng-repeat="truck in trucklists | filter:searchMenu | filter:flatten | filter:filterRange"  href="#/app/trucklists/{{truck.$id}}/{{truck.owner}}">     
+        <img src="{{truck.trucksimg}}">
+        <h2> {{truck.brands}}</h2>
+        <p>{{truck.drate | currency:"Rp"}} / Day</p>
       </ion-item>
     </ion-list>
+    
   </ion-content>
 </ion-view>
