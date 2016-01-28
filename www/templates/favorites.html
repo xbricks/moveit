@@ -8,7 +8,8 @@
       <ion-item class="item item-thumbnail-left" ng-repeat="trucklist in $storage.fav" href="#/app/trucklists/{{trucklist.$id}}/{{trucklist.owner}}">     
 	      <img src="{{trucklist.trucksimg}}">
 	      <h2> {{trucklist.brands}}</h2>
-	      <p>Rp. {{trucklist.drate}} / Day</p>
+	      <p>Rp. {{trucklist.tripRate}} / trip</p><br>
+        <h3><i class="icon ion-location"></i> {{trucklist.loc}}</h3>
         <ion-option-button class="button-assertive" ng-click="removeItem($index)">
           <i class="ion-trash-a"></i>
         </ion-option-button>

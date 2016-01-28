@@ -1,10 +1,10 @@
 <ion-modal-view>
 <ion-header-bar class="bar bar-header bar-positive">
-  <h1 class="title">Add New Trucks</h1>
-    <button class="button button-clear button-primary" ng-click="closeModal(1)">Cancel</button>
+  <h1 class="title">Change Password</h1>
+    <button class="button button-clear button-primary" ng-click="closeModal(2)">Cancel</button>
   </ion-header-bar>
   <ion-content>
-  	<div class="list list-inset">
+    <div class="list list-inset">
       <label class="item item-input item-stacked-label">
         <span class="input-label">Trucks Photo</span>
         <button class="button button-positive" ng-click="getImage()">
@@ -35,8 +35,8 @@
       <label class="item item-input item-stacked-label">
         <textarea placeholder="Add your trucks specification here" rows="5" ng-model="trucks.Desc"></textarea>
       </label>
-      <button class="button button-block button-outline button-royal" ng-click="addTrucks(trucks)">
-        Add New Trucks
+      <button class="button button-block button-outline button-royal" ng-click="updateTrucks(trucks)">
+        Update Trucks
       </button>
     </div>
   </ion-content>

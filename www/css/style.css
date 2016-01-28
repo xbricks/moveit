@@ -41,3 +41,8 @@
     -ms-flex-align: center;
     align-items: center;
 }
+
+.item-thumbnail-left, .item-thumbnail-left .item-content{
+    margin: 0 5px 5px 5px;
+    background-color: #E7E7E7;
+}

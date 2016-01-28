@@ -1,33 +1,32 @@
 <ion-view view-title="Move It">
   <ion-content>
   	<div class="list card">
-		<div class="item">
-			<h2>{{trucklist.brands}}</h2>
-			<p>{{trucklist.drate | currency:"Rp"}} / Day</p>
+		<div class="item" style="background-color:#886AEA;color:#fff;">
+			<h2 style="color:#fff;font-size:24px;margin-bottom:15px">{{trucklist.brands}}</h2>
+			<p style="color:#fff;">{{trucklist.tripRate | currency:"Rp"}} / Trip, Max {{trucklist.maxhour}} Hour</p>
 		</div>
-		<div class="item item-body">
+		<div class="item item-body" style="background-color:#E7E7E7;">
 			<img class="full-image" src="{{trucklist.trucksimg}}">
-			<p>
+			<p style="color: #616A7F;">
 				{{trucklist.desc}}
 			</p>
-			<p>
-				<label>Additional Rate</label>
-				<a href="#" class="subdued">Rates {{trucklist.dmile | currency:"Rp"}} / miles</a>
+			<p style="color: #2D3956;">
+				<label>Additional Rate exceed Max Hour</label><br>
+				{{trucklist.hourRate | currency:"Rp"}} / Hour
 			</p>
-			<p>
-				<a href="#" class="subdued">Available from {{trucklist.avafrom | date:'dd-MM-yy'}} to {{trucklist.avauntil | date:'dd-MM-yy'}}</a>
+			<p style="color: #2D3956;">
+				<label>Additional Services</label>
+				{{trucklist.porterRate | currency:"Rp"}} / Porter
 			</p>
-			<p><bold>Tenant: {{user.displayName}}</bold></p>
-			<pre>{{trucklists.indexOf(trucklist)}}</pre>
+			<p style="color: #2D3956;">Location: <bold>{{trucklist.loc}}</bold></p>
+			<p style="color: #2D3956;">Tenant: <bold>{{user.displayName}}</bold></p>
+			
 		</div>
-		<div class="item tabs tabs-secondary tabs-icon-left">
+		<div class="item tabs tabs-secondary tabs-icon-left" style="background-color:#886AEA;color:#fff;">
 			<a class="tab-item" href="tel: {{user.phone}}">
 				<i class="icon ion-ios-telephone"></i>
 				Call Tenant
 			</a>
-			<!--<a class="tab-item" ng-click="addFav(true,{{trucklists.indexOf(trucklist)}})">
-				<i class="icon ion-ios-bookmarks"></i>
-			</a>-->
 			<a class="tab-item" ng-click="addFav(trucklist)">
 				<i class="icon ion-heart"></i>
 				Add to Favorite

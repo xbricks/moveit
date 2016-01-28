@@ -14,6 +14,7 @@ angular.module('truckFilters', [])
     }
   })
 
+
 .filter("dateFilter", function() {
   return function(items, from, to) {
 

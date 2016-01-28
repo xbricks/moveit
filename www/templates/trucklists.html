@@ -1,16 +1,18 @@
 <ion-view view-title="Move It">
-  <ion-content>
+  <ion-content ng-controller="TrucklistsCtrl">
   	<label class="item item-input">
   		<i class="icon ion-search placeholder-icon"></i>
   		<input type="text" ng-model="searchMenu" placeholder="Search">
 	  </label>
     <ion-list ng-controller="TrucklistsCtrl">
-      <ion-item class="item item-thumbnail-left" ng-repeat="truck in trucklists | filter:searchMenu | filter:flatten | filter:filterRange"  href="#/app/trucklists/{{truck.$id}}/{{truck.owner}}">     
+      <ion-item class="item item-thumbnail-left" ng-repeat="truck in trucklists | filter:searchMenu | filter:flatten"  href="#/app/trucklists/{{truck.$id}}/{{truck.owner}}">     
         <img src="{{truck.trucksimg}}">
-        <h2> {{truck.brands}}</h2>
-        <p>{{truck.drate | currency:"Rp"}} / Day</p>
+        <h2 style="font-weight: 800;color:#616A7F;"> {{truck.brands}}</h2>
+        <p>{{truck.tripRate | currency:"Rp"}} / Trip</p></br>
+        <h3><i class="icon ion-location"></i> {{truck.loc}}</h3>
+        <pre>{{truck.$id | json}}</pre>
       </ion-item>
     </ion-list>
-    
+
   </ion-content>
 </ion-view>

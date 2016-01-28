@@ -1,20 +1,11 @@
 angular.module('mv.controllers', [])
 
-
-
  /*****************************************************************
   ***********************Login Controller**************************
   *****************************************************************/
-.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, $ionicLoading, $rootScope, $ionicPopup, $timeout) {
-    //console.log('Login Controller Initialized');
-    console.log("load controller firebase url : "+fb);
-    var ref = new Firebase(fb);
-    var auth = $firebaseAuth(ref);
-
+.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, $ionicLoading, $rootScope, $ionicPopup, $timeout, AccountFactory) {
 
     // Create the login modal that we will use later
-  
-
     $ionicModal.fromTemplateUrl('templates/signup.html', {
         id:'2',
         scope: $scope
@@ -24,67 +15,16 @@ angular.module('mv.controllers', [])
 
 
     $scope.createUser = function (user) {
-        console.log("Create User Function called");
-        if (user && user.email && user.password && user.displayname && user.phone && user.address) {
-            $ionicLoading.show({
-                template: 'Signing Up...'
-            });
+      AccountFactory.createUser(user);
+      $timeout(function() {
+        $scope.modal2.hide();
+        $scope.modal1.show();
+      }
+      ,3000);
 
-            auth.$createUser({
-                email: user.email,
-                password: user.password
-            }).then(function (userData) {
-                var alertPopup = $ionicPopup.alert({
-                  title: 'Success',
-                  template: 'You have been successfully registered',
-                  buttons: [
-                    {
-                      text: '<b>Login Now</b>',
-                      type: 'button-stable',
-                      onTap: function(e) {
-                        $scope.modal2.hide();
-                        $scope.modal1.show();
-                      }
-                    }
-                  ]
-                });
-                ref.child("users").child(userData.uid).set({
-                    email: user.email,
-                    displayName: user.displayname,
-                    phone: user.phone,
-                    address: user.address
-                });
-                $ionicLoading.hide();
-                $scope.modal2.hide();
-            }).catch(function (error) {
-                //alert("Error: " + error);
-                var alertPopup = $ionicPopup.alert({
-                  title: 'Login Failed!',
-                  template: error,
-                  buttons: [
-                    {
-                      text: '<b>Ok</b>',
-                      type: 'button-assertive'
-                    }
-                  ]
-                });
-                $ionicLoading.hide();
-            });
-        } else
-            //alert("Please fill all details");
-            var alertPopup = $ionicPopup.alert({
-              title: 'Error!',
-              template: 'Please fill all details',
-              buttons: [
-                {
-                  text: '<b>Ok</b>',
-                  type: 'button-assertive'
-                }
-              ] 
-            });
     }
 
-
+    //modal for login page template
     $ionicModal.fromTemplateUrl('templates/login.html', {
         id:'1',
         scope: $scope
@@ -93,55 +33,25 @@ angular.module('mv.controllers', [])
     });
 
     $scope.signIn = function (user) {
+        AccountFactory.signIn(user);
+ 
+        $timeout(function() {
+          var isAuthenticated = AccountFactory.checkAuth();
+          console.log("valid val:", isAuthenticated);
+          if (isAuthenticated) {
+            console.log("valid user");
+            $state.go('app.trucklists');
+            //$rootScope.userData = isAuthenticated;
+          }
 
-        if (user && user.email && user.password) {
-            $ionicLoading.show({
-                template: 'Signing In...'
-            });
-            auth.$authWithPassword({
-                email: user.email,
-                password: user.password
-            }).then(function (authData) {
-                console.log("Logged in as:" + authData.uid);
-                ref.child("users").child(authData.uid).on('value', function (snapshot) {
-                    var val = snapshot.val();
-                    //To Update AngularJS $scope using $timeout
-                    $timeout(function() {
-                        $rootScope.userData = val;
-                        $rootScope.userID = authData.uid;
-                    });
-                });
-                $ionicLoading.hide();
-                $scope.modal1.hide();
-                $state.go('app.trucklists');
-            }).catch(function (error) {
-                //alert("Authentication failed:" + error.message);
-                var alertPopup = $ionicPopup.alert({
-                  title: 'Login Failed!',
-                  template: error,
-                  buttons: [
-                    {
-                      text: '<b>Ok</b>',
-                      type: 'button-assertive'
-                    }
-                  ]
-                });
-                $ionicLoading.hide();
-            });
-        } else
-            //alert("Please enter email and password both");
-            var alertPopup = $ionicPopup.alert({
-                title: 'Login Failed!',
-                template: 'Please enter email and password both',
-                buttons: [
-                {
-                  text: '<b>Ok</b>',
-                  type: 'button-assertive'
-                }
-              ]
-            });
+          $scope.modal1.hide();
+        }
+        ,3000);
+        
     }
 
+
+    //method for closing and opening modal window
     $scope.openModal = function(index) {
         if (index == 1) $scope.modal1.show();
         else $scope.modal2.show();
@@ -164,17 +74,17 @@ angular.module('mv.controllers', [])
  /*****************************************************************
   ***********************App Controller****************************
   *****************************************************************/
-.controller('AppCtrl', function($scope,$state) {
+.controller('AppCtrl', function ($rootScope, $scope, $state, $timeout, getDataFactory, AccountFactory) {
 
-    // Callback Function
-    var ref = new Firebase(fb);
-    ref.onAuth(function(authData) {
-      if (authData) {
-        console.log("Authenticated with uid:", authData.uid);
-      } else {
-        console.log("Client unauthenticated.")
-      }
-    });
+
+    $timeout(function() {
+      //var isAuthenticated = AccountFactory.checkAuth();
+      //$scope.userData = getDataFactory.getUser(isAuthenticated.uid);
+      $rootScope.userData = getDataFactory.getUser($rootScope.userID);
+    },3000);
+
+   
+
 })
 
 
@@ -182,39 +92,29 @@ angular.module('mv.controllers', [])
   ********************Accounts Controller**************************
   *****************************************************************/
 
-.controller('AccountCtrl', function ($firebase, $scope, $ionicModal, $ionicLoading) {
-    var fbData = new Firebase(fb);
-    var authData = fbData.getAuth();
+.controller('AccountCtrl', function ($firebase, $scope, $timeout, $ionicModal, AccountFactory) {
 
+    //initialize modal windows
+    $ionicModal.fromTemplateUrl('templates/changePassModal.html', {
+        scope: $scope
+    }).then(function (modal) {
+        $scope.modal = modal;
+        console.log("modal clicked");
+    });
+
+    //call changePass function from services factory
+    $scope.changePass = function(user){
+        AccountFactory.resetPass(user);
+        $timeout(function() {
+          $scope.modal.hide();
+        }
+        ,3000);
+          
+    };
+
+    //call updateAccount function from services factory
     $scope.update = function(user){
-
-        $ionicLoading.show({
-            template: 'Updating Data'
-        });
-
-        var uRef = new Firebase(fb+'users/'+authData.uid);
-        // Same as the previous example, except we will also display an alert
-        // message when the data has finished synchronizing.
-        var onComplete = function(error) {
-          if (error) {
-            console.log('Synchronization failed');
-            var alertPopup = $ionicPopup.alert({
-                  title: 'Failed Updating!',
-                  template: Error,
-                  buttons: [
-                    {
-                      text: '<b>Ok</b>',
-                      type: 'button-assertive'
-                    }
-                  ]
-            });
-          } else {
-            console.log('Synchronization succeeded');
-            $ionicLoading.hide();
-          }
-        };
-        // Modify the 'first' and 'last' children, but leave other data at fredNameRef unchanged
-        uRef.update({ displayName: user.displayName, address: user.address, phone: user.phone }, onComplete);
+        AccountFactory.updateAccount(user);
     };
 
 })
@@ -224,35 +124,59 @@ angular.module('mv.controllers', [])
   ********************Manage Trucks Controller*********************
   *****************************************************************/
 
-.controller('ManageCtrl', function ($ionicLoading, $firebase, $rootScope, $scope, $timeout, $ionicModal, $cordovaImagePicker, $ionicPlatform, $ionicPopup, getDataFactory) {
- 
-    var fbData = new Firebase(fb);
+.controller('ManageCtrl', function ($ionicLoading, $firebase, $scope, $timeout, $ionicModal, $cordovaImagePicker, $ionicPlatform, $ionicPopup, getDataFactory, manageTrucksFactory, $ionicHistory, $log ) {
 
-    console.log("truck authData", $rootScope.userID);
-
+    //get truck data from factory
     $scope.userTrucks = getDataFactory.getTrucks();
-    console.log("user trukcs", $scope.userTrucks);
 
+    //enable swipe to show menu
     $scope.listCanSwipe = true  
 
-    // Display modal for adding trucks
+ 
+    //modal for adding trucks
     $ionicModal.fromTemplateUrl('templates/addtrucks.html', {
-
+        id:'1',
         scope: $scope
-    }).then(function (modal) {
-        $scope.modal = modal;
-        console.log("modal clicked");
+    }).then(function(modal) {
+        $scope.modal1 = modal;
     });
 
+    // modal for edit trucks
+    $ionicModal.fromTemplateUrl('templates/updateTruckModal.html', {
 
+        id:'2',
+        scope: $scope
+    }).then(function(modal) {
+        console.log("edit modal called");
+        $scope.modal2 = modal;
+    });
 
-    //Image Picker
-    $scope.collection = {
+    //modal switch function to open and close between 2 modal window  
+    $scope.openModal = function(index) {
+        if (index == 1) $scope.modal1.show();
+        else $scope.modal2.show();
+    };
+    $scope.closeModal = function(index) {
+        if (index == 1) $scope.modal1.hide();
+        else $scope.modal2.hide();
+    };
+
+    $scope.$on('$destroy', function() {
+        console.log('Destroying modals...');
+        $scope.oModal1.remove();
+        $scope.oModal2.remove();
+    });
+
+    //Initial data for Image Picker
+    $scope.trucks = {
         selectedImage : ''
     };
  
+
+    //Trigger a callback function to get image once the device is ready,
+    //or immediately if the device is already ready.
     $ionicPlatform.ready(function() {
- 
+
         $scope.getImage = function() {
             console.log("getimage trigered");       
             // Image picker will load images according to these settings
@@ -266,143 +190,53 @@ angular.module('mv.controllers', [])
             $cordovaImagePicker.getPictures(options).then(function (results) {
                 // Loop through acquired images
                 for (var i = 0; i < results.length; i++) {
-                    $scope.collection.selectedImage = results[i];   // We loading only one image so we can use it like this
+                    $scope.trucks.selectedImage = results[i];   // We loading only one image so we can use it like this
  
-                    window.plugins.Base64.encodeFile($scope.collection.selectedImage, function(base64){  // Encode URI to Base64 needed for contacts plugin
-                        $scope.collection.selectedImage = base64;
+                    window.plugins.Base64.encodeFile($scope.trucks.selectedImage, function(base64){  // Encode URI to Base64 needed for contacts plugin
+                        $scope.trucks.selectedImage = base64;
                         console.log("base64:",base64);
-                       
                     });
                 }
             }, function(error) {
                 console.log('Error: ' + JSON.stringify(error));    // In case of error
             });
         };  
- 
     }); 
 
+    //edit function will save temporary data selected trucks and pass them to updateTruckModal 
+    $scope.editTrucks = function(trucks){
+      $scope.trucks = {
+        Brand:trucks.brands,
+        tripRate:trucks.tripRate,
+        hourRate:trucks.hourRate,
+        porterRate:trucks.porterRate,
+        Desc:trucks.desc,
+        Loc:trucks.loc,
+        maxHour:trucks.maxhour,
+        selectedImage :trucks.trucksimg,
+        ID: trucks.$id
+      };
+      console.log("edit called");
+      $scope.openModal(2);
+    }
 
-    //Date Picker
-    $scope.currentDate = new Date();
-    $scope.currentDate2 = $scope.currentDate;
-
-    $scope.datePickerCallback = function (val) {
-      if(typeof(val)==='undefined'){    
-          console.log('Date not selected');
-
-      }else{
-          console.log('Selected date is : ', val);
-          $scope.currentDate = new Date(val).getTime();
-      }
-    };
-
-    $scope.datePickerCallback2 = function (val) {
-      if(typeof(val)==='undefined'){    
-          console.log('Date not selected');
-
-      }else{
-          console.log('Selected date is : ', val.getTime());
-          $scope.currentDate2 = new Date(val).getTime();
-      }
-    };
-
-
-    $scope.datepickerObject = {
-      titleLabel: 'Select Date',
-      inputDate: $scope.currentDate,  //Optional
-      templateType: 'popup', //Optional
-      showTodayButton: 'true', //Optional
-      modalHeaderColor: 'bar-positive', //Optional
-      modalFooterColor: 'bar-positive', //Optional
-      from: $scope.currentDate, //Optional
-      to: new Date(2017, 1, 1),  //Optional
-      callback: function (val) {  //Mandatory
-         $scope.datePickerCallback(val);
-      },
-      dateFormat: 'dd-MM-yyyy', //Optional
-      closeOnSelect: false, //Optional
-    };   
-
-    $scope.datepickerObject2 = {
-      titleLabel: 'Select Date',
-      inputDate: $scope.currentDate,  //Optional
-      templateType: 'popup', //Optional
-      showTodayButton: 'true', //Optional
-      modalHeaderColor: 'bar-positive', //Optional
-      modalFooterColor: 'bar-positive', //Optional
-      from: $scope.currentDate, //Optional
-      to: new Date(2017, 1, 1),  //Optional
-      callback: function (val) {  //Mandatory
-         $scope.datePickerCallback2(val);
-      },
-      dateFormat: 'dd-MM-yyyy', //Optional
-      closeOnSelect: false, //Optional
-    };  
-
+    //call update function from services factory
+    $scope.updateTrucks = function(trucks){
+        manageTrucksFactory.updateTrucks(trucks);
+        $timeout(function() {
+          $scope.closeModal(2);
+        }
+        ,3000);
+    }
     
-
+    //call add trucks function from services factory 
     $scope.addTrucks = function (trucks) {
-        console.log("addTrucks Function called");
-        if ( $scope.collection.selectedImage && trucks.Brand && trucks.Daily && trucks.Mile && trucks.Desc && trucks.Loc) {
-            $ionicLoading.show({
-                template: 'Adding Trucks'
-            });
-
-            var fbData = new Firebase(fb);
-            var authData = fbData.getAuth();
-            var postsRef = fbData.child("fleet");
-
-            // we can also chain the two calls together
-            postsRef.push().set({
-                owner: authData.uid,
-                brands: trucks.Brand,
-                drate: trucks.Daily,
-                mrate: trucks.Mile,
-                desc: trucks.Desc,
-                loc: trucks.Loc,
-                avafrom: $scope.currentDate,
-                avauntil: $scope.currentDate2,
-                trucksimg:$scope.collection.selectedImage
-            },function(error) {
-              if (error) {
-                var alertPopup = $ionicPopup.alert({
-                  title: 'Failed Adding Trucks !',
-                  template: Error,
-                  buttons: [
-                    {
-                      text: '<b>Ok</b>',
-                      type: 'button-assertive'
-                    }
-                  ]
-                });
-                $ionicLoading.hide();
-              } else {
-                var alertPopup = $ionicPopup.alert({
-                  title: 'Success Adding Trucks !',
-                  template: 'Success',
-                  buttons: [
-                    {
-                      text: '<b>Ok</b>',
-                      type: 'button-royal'
-                    }
-                  ]
-                });
-                $scope.modal.hide();
-                $ionicLoading.hide();
-            }});
-
-        } else
-            //alert("Please fill all details");
-            var alertPopup = $ionicPopup.alert({
-              title: 'Error!',
-              template: 'Please fill all details',
-              buttons: [
-                {
-                  text: '<b>Ok</b>',
-                  type: 'button-assertive'
-                }
-              ] 
-            });
+        manageTrucksFactory.addTrucks(trucks);
+        $timeout(function() {
+          $scope.closeModal(1);
+        }
+        ,3000);
+        
     }
 
 
@@ -410,93 +244,12 @@ angular.module('mv.controllers', [])
 })
 
 
-
-
-
  /*****************************************************************
   ****************Trucks Lists Controller**************************
   *****************************************************************/
 
-.controller('TrucklistsCtrl', function ($scope, $ionicModal, getDataFactory) {
-    
+.controller('TrucklistsCtrl', function ($scope, $ionicModal, getDataFactory) { 
     $scope.trucklists = getDataFactory.getTrucks();
-
-
-    $ionicModal.fromTemplateUrl('templates/filterdate.html', {
-        scope: $scope
-    }).then(function (modal) {
-        $scope.modal = modal;
-        console.log("modal clicked");
-    });
-
-    //Filter Price
-    $scope.range = {
-        minPrice: 1,
-        maxPrice: 999999
-    };
-
-    $scope.filterRange = function(obj) {
-        return obj.drate >= $scope.range.minPrice && obj.drate <= $scope.range.maxPrice;
-    };
-
-
-    //Date Picker
-    $scope.bookFrom = new Date();
-    $scope.bookTo = $scope.bookFrom;
-
-    $scope.bookFromCallback = function (val) {
-      if(typeof(val)==='undefined'){    
-          console.log('Date not selected');
-
-      }else{
-          console.log('Selected date is : ', val);
-          $scope.bookFrom = new Date(val).getTime();
-      }
-    };
-
-    $scope.bookToCallback = function (val) {
-      if(typeof(val)==='undefined'){    
-          console.log('Date not selected');
-
-      }else{
-          console.log('Selected date is : ', val.getTime());
-          $scope.bookTo = new Date(val).getTime();
-      }
-    };
-
-
-    $scope.bookFromObject = {
-      titleLabel: 'Select Date',
-      inputDate: $scope.bookFrom,  //Optional
-      templateType: 'popup', //Optional
-      showTodayButton: 'true', //Optional
-      modalHeaderColor: 'bar-positive', //Optional
-      modalFooterColor: 'bar-positive', //Optional
-      from: $scope.bookFrom, //Optional
-      to: new Date(2017, 1, 1),  //Optional
-      callback: function (val) {  //Mandatory
-         $scope.bookFromCallback(val);
-      },
-      dateFormat: 'dd-MM-yyyy', //Optional
-      closeOnSelect: false, //Optional
-    };   
-
-    $scope.bookToObject = {
-      titleLabel: 'Select Date',
-      inputDate: $scope.bookFrom,  //Optional
-      templateType: 'popup', //Optional
-      showTodayButton: 'true', //Optional
-      modalHeaderColor: 'bar-positive', //Optional
-      modalFooterColor: 'bar-positive', //Optional
-      from: $scope.bookFrom, //Optional
-      to: new Date(2017, 1, 1),  //Optional
-      callback: function (val) {  //Mandatory
-         $scope.bookToCallback(val);
-      },
-      dateFormat: 'dd-MM-yyyy', //Optional
-      closeOnSelect: false, //Optional
-    }; 
-
 })
 
 
@@ -514,11 +267,6 @@ angular.module('mv.controllers', [])
    
     console.log("scope user : ", $scope.user);
 
-
-    
-
-
-    
     $scope.addFav = function (item){
       var alertPopup = $ionicPopup.alert({
           title: 'Success!',
@@ -534,24 +282,11 @@ angular.module('mv.controllers', [])
       favItemFactory.getfav.push(item);
     } 
 
-    // $scope.addFav = function (bool, index){
-    //     alert("fav added "+index);
-    //     if (bool) favItemFactory.addItemToFavorites($scope.trucklists[index]);  
-    // }
-    
-   
-
 })
 
 
 .controller('FavItemCtrl', function ($scope, $localStorage, favItemFactory) {
     
-    // $scope.favorites = favItemFactory.favorites;
-   
-    // $scope.removeItem = function(item, index) {
-    //     favItemFactory.removeItemFromFavorites(item, index);
-    // }
-
     $scope.$storage = $localStorage;
 
     $scope.removeItem = function (index){

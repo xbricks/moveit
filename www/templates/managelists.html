@@ -4,11 +4,12 @@
       <ion-item class="item item-thumbnail-left" ng-repeat="userTruck in userTrucks | filter: { owner: userID}" href="#/app/trucklists/{{userTruck.$id}}/{{userTruck.owner}}">     
 	      <img src="{{userTruck.trucksimg}}">
 	      <h2> {{userTruck.brands}}</h2>
-	      <p>${{userTruck.drate}} / Day</p>
+	      <p>${{userTruck.tripRate}} / trip</p><br>
+        <h3><i class="icon ion-location"></i> {{userTruck.loc}}</h3>
 		  <ion-option-button class="button-assertive" ng-click="userTrucks.$remove(userTruck)">
 	      	Delete
 	      </ion-option-button>
-	      <ion-option-button class="button-info" ng-click="">
+	      <ion-option-button class="button-info" ng-click="editTrucks(userTruck)">
       		Edit
 		  </ion-option-button>
 
@@ -18,5 +19,5 @@
   </ion-content>
 </ion-view>
 <ion-tabs class="tabs-royal tabs-icon-top">
-  <ion-tab title="Add New Trucks" icon="ion-plus-circled" ng-click="modal.show()"></ion-tab>
+  <ion-tab title="Add New Trucks" icon="ion-plus-circled" ng-click="openModal(1)"></ion-tab>
 </ion-tabs>

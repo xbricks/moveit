@@ -1,0 +1,25 @@
+<ion-modal-view>
+<ion-header-bar class="bar bar-header bar-positive">
+  <h1 class="title">Change Password</h1>
+    <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+  </ion-header-bar>
+  <ion-content>
+    <form>
+      <ion-list>
+        <label class="item item-input">
+          <span class="input-label">Display Name</span>
+          <input type="text" ng-model="userData.email" maxlength="20">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Old Password</span>
+          <input type="text" ng-model="userData.oldPass">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">New Password</span>
+          <input type="text" ng-model="userData.newPass">
+        </label>
+        <button class="button button-full button-positive" ng-click="changePass(userData)">Change Password</button>
+      </ion-list>
+    </form>
+  </ion-content>
+</ion-modal-view>
