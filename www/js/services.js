@@ -32,8 +32,6 @@ angular.module('mv.services', ['firebase','ionic', 'ui.router'])
     	function ($firebase, $firebaseAuth, $rootScope, $ionicLoading, $ionicPopup, $timeout, $ionicPopup, $scope, $state, getDataFactory) {
     		// create a reference to the database where we will call our data
             var ref = new Firebase(fb);
-            var authData = ref.getAuth();
-            
             var auth = $firebaseAuth(ref);
             
 
@@ -212,7 +210,10 @@ angular.module('mv.services', ['firebase','ionic', 'ui.router'])
 					});
             	},
             	updateAccount: function(user){
-            		var uRef = new Firebase(fb+'users/'+authData.uid);
+            		var authDatas = ref.getAuth();
+            		var uRef = new Firebase(fb+'users/'+authDatas.uid);
+            		console.log('auth uid', authDatas.uid);
+            		console.log('uref', uRef);
 					$ionicLoading.show({
 			            template: 'Updating Data'
 			        });
@@ -235,6 +236,16 @@ angular.module('mv.services', ['firebase','ionic', 'ui.router'])
 			            });
 			          } else {
 			            console.log('update succeeded');
+			            var alertPopup = $ionicPopup.alert({
+			                  title: 'Success!',
+			                  template: 'Your Data Successfully Updated',
+			                  buttons: [
+			                    {
+			                      text: '<b>Ok</b>',
+			                      type: 'button-stable'
+			                    }
+			                  ]
+			            });
 			            $ionicLoading.hide();
 			          }
 			        };
